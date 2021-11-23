@@ -8,7 +8,7 @@ This repository contains build instructions and packages necessary to run and bu
     2. The `rpi_motor_control` package that allows controlling several motors directly using the raspberry pi gpio headers.
 2. The `build_instructions/`:
     1. Parts list;
-    2. cicuitry diagrams;
+    2. circuitry;
     4. Build.Me.
 
 # Contribute
