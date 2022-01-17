@@ -20,33 +20,33 @@ class Teleop:
             listener.join()
 
     def on_press(self, key):
-        msg = '{0}_p'.format(key)
         try:
             if key.char in self.key_list:
                 if key.char not in self.pressed_key_list:
                     self.pressed_key_list.append(key.char)                
-                    self.publish(msg)
+                    self.publish('{0}_p'.format(key.char))
         
         except AttributeError:
             if key in self.key_list:
-                if key.char not in self.pressed_key_list:
+                if key not in self.pressed_key_list:
                     self.pressed_key_list.append(key)                
-                    self.publish(msg)
+                    # self.publish('{0}_p'.format(key))
+                    self.publish('{0}_p'.format(key).split('.')[1])
 
 
     def on_release(self, key):
-        msg = '{0}_r'.format(key)
         try:
             if key.char in self.key_list:
                 self.pressed_key_list.remove(key.char)
-                self.publish(msg)
+                self.publish('{0}_r'.format(key.char))
         
         except AttributeError:
             if key == keyboard.Key.esc:                
                 return False    # Stop listener
             if key in self.key_list:
-                self.pressed_key_list.remove(key)
-                self.publish(msg)
+                self.pressed_key_list.remove(key)                
+                # self.publish('{0}_r'.format(key))
+                self.publish('{0}_r'.format(key).split('.')[1])
     
     def publish(self, msg):
         rospy.loginfo(msg)
