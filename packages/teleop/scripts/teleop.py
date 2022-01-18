@@ -9,7 +9,7 @@ import threading
 
 
 class Teleop:
-    def __init__(self, key_list, topic_name='key_press'):
+    def __init__(self, key_list, topic_name='key_press', rate=20):
         self.key_list = key_list    # Can't have "'" or ","        
         self.topic_name = topic_name
         
@@ -17,6 +17,7 @@ class Teleop:
         self.pub = rospy.Publisher(topic_name, String, queue_size=1)
 
         self.terminate = False
+	self.rate = rospy.Rate(rate)
         threading.Thread(target=self.publish_thread).start()
         
         with Listener(
@@ -31,6 +32,7 @@ class Teleop:
                 msg = str(self.pressed_key_list)
                 rospy.loginfo(msg)
                 self.pub.publish(msg)
+		self.rate.sleep()
 
     def on_press(self, key):
         try:                
