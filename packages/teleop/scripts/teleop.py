@@ -6,6 +6,7 @@ from std_msgs.msg import String
 from pynput import keyboard
 from pynput.keyboard import Key, Listener, KeyCode
 
+
 class Teleop:
     def __init__(self, key_list, topic_name='key_press'):
         self.key_list = key_list        
@@ -20,33 +21,18 @@ class Teleop:
             listener.join()
 
     def on_press(self, key):
-        try:
-            if key.char in self.key_list:
-                if key.char not in self.pressed_key_list:
-                    self.pressed_key_list.append(key.char)                
-                    self.publish('{0}_p'.format(key.char))
+        try:                
+            if key.char in self.key_list:                
+                self.publish(key.char)
         
-        except AttributeError:
-            if key in self.key_list:
-                if key not in self.pressed_key_list:
-                    self.pressed_key_list.append(key)                
-                    # self.publish('{0}_p'.format(key))
-                    self.publish('{0}_p'.format(key).split('.')[1])
+        except AttributeError:      
+            if key in self.key_list:     
+                self.publish(str(key).split('.')[1])
 
 
     def on_release(self, key):
-        try:
-            if key.char in self.key_list:
-                self.pressed_key_list.remove(key.char)
-                self.publish('{0}_r'.format(key.char))
-        
-        except AttributeError:
-            if key == keyboard.Key.esc:                
-                return False    # Stop listener
-            if key in self.key_list:
-                self.pressed_key_list.remove(key)                
-                # self.publish('{0}_r'.format(key))
-                self.publish('{0}_r'.format(key).split('.')[1])
+        if key == keyboard.Key.esc:                
+            return False    # Stop listener
     
     def publish(self, msg):
         rospy.loginfo(msg)
@@ -60,4 +46,3 @@ if __name__ == '__main__':
         t = Teleop(key_list)
     except rospy.ROSInterruptException:
         pass
-
