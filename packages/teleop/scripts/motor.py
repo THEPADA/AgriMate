@@ -15,8 +15,19 @@ class Motor():
     def motor_thread(self):
         while self.terminate:
             if abs(self.w) > self.minimum_w:
+                
+                # Set direction
+                if self.w > 0:
+                    self.driver.digital_write(self.enable_pin, 1)
+                    self.driver.digital_write(self.dir_pin, 0)
+                else:
+                    self.driver.digital_write(self.enable_pin, 1)
+                    self.driver.digital_write(self.dir_pin, 1)
+                            
+                # Set motor speed
                 stepdelay = 360/(6400*self.w)
-
+                
+                # Move motor
                 self.driver.digital_write(self.step_pin, True)
                 time.sleep(stepdelay)
                 self.driver.digital_write(self.step_pin, False)
