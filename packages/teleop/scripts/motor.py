@@ -1,5 +1,5 @@
 import threading
-from DRV8825 import DRV8825
+from .DRV8825 import DRV8825
 
 
 class Motor():
